@@ -12,12 +12,8 @@
   --light-grey: rgb(210, 210, 210);
 
   /* Font sizes */                               
-  --hdr-fontsize: 36px;
   --btn-fontsize: 28px;
   --txt-fontsize: 22px;
-  --score-fontsize: 58px;
-  --name-fontsize: 30px;
-  --move-fontsize: 22px;
   --ftr-fontsize: 12px;
 
   /* Font family */
@@ -26,10 +22,14 @@
 
   /*Margins and paddings*/
   --main-padding: 10px;
-  --hdr-padding: 10px;
   --ftr-padding: 5px;
-  --hdr-gap:  20px;
   --ftr-gap:  20px;
+
+  /*Calculator*/
+  --calculator-padding: 25px;
+  --calculator-gap: 15px;
+  --btns-padding: 20px;
+  --btns-gap: 10px;
 
   /*Buttons*/
   --btn-padding: 20px;
@@ -37,7 +37,7 @@
   --btn-height: 100px;
 
   /* Maximum column width */
-  --col-width: 800px;
+  --col-width: 400px;
 }
 
 
@@ -73,37 +73,18 @@ body{
   align-items: center;
 }
 
-main,header{
+main{
   max-width: var(--col-width);
   width: 100%;
 }
 
-h1{
-  color: var(--col10);
-  font-size: var(--hdr-fontsize);                                        
-  margin: 0 auto;
-  padding: 0 var(--hdr-padding);
-  text-align: center;
-}
-
-main p{
-  margin: 0 auto;
-  padding: 0 var(--main-padding);
-  text-align: center;
-}
-
 /*----------------------------------------*/
-header,footer{
+footer{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-header{
-  gap: var(--hdr-gap);
-  padding: var(--hdr-padding);
 }
 
 footer{
@@ -121,6 +102,49 @@ main{
   justify-content: space-around;
 }
 
+/* || Calculator */
+.calculator,.calculator .buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    text-align: center;
+}
+
+.calculator{
+    gap: var(--calculator-gap);
+    padding: var(--calculator-padding);
+    background-color: var(--col10);
+    border-radius: 10px;
+}
+
+.calculator .buttons{
+    gap: var(--btns-gap);
+    padding: var(--btns-padding);
+
+}
+
+
+.calculator .row{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    text-align: center; 
+    gap: var(--btns-gap);
+}
+
+.calculator .button{
+   flex: 1;
+   border-radius: 50%;
+   padding: 10px 0;
+   background-color: var(--col70);
+}
+
+.calculator .display{
+    background-color: var(--col30);
+    border-radius: 10px;
+ }
 
 /* || Footer */
 footer {
