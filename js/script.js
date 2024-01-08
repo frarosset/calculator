@@ -18,6 +18,10 @@ function divide(x1,x2){
 
 function operate(operation,x1,x2){
     let result;
+
+    if (x1=="" || x2=="" || operation=="")
+        return "";
+
     x1=Number(x1);
     x2=Number(x2);
 
@@ -52,9 +56,18 @@ function operate(operation,x1,x2){
 // Variable digitStatus helps distinguish whether we are digiting a number or an operator, and its index
 // status 0: you are filling x1 for the first time, odd: you are selecting operation, even: you are filling x2
 
+// Note: display_txt is not really used in this implementation...could be used to show the single operations over time
+
 function updateDisplay(){
-    digitsDisplay.textContent = display_txt;
-    resultsDisplay.textContent = `STATUS: ${digitStatus} (${x1[0]} ${operator[0]} ${x2[0]})`;
+    digitsDisplay.textContent = `${x1[0]} ${operator[0]} ${x2[0]}`;
+
+    let partial_result = String(operate(operator[0],x1[0],x2[0]));
+    resultsDisplay.textContent = partial_result.length>0?`(= ${partial_result})`:'';
+}
+
+function updateDisplayWithResults(){
+    digitsDisplay.textContent = `${x1[0]} ${operator[0]} ${x2[0]} =`;
+    resultsDisplay.textContent = String(operate(operator[0],x1[0],x2[0]));
 }
 
 function numberBtnCallback(e){     
@@ -149,7 +162,11 @@ function cancelBtnCallback(e){
     updateDisplay();
 }
 
-
+function equalBtnCallback(e){     
+    let btn = e.target;
+    console.log("Click on =!");
+    updateDisplayWithResults();
+}
 
 
 
@@ -158,6 +175,7 @@ function init(){
     let operatorBtn = document.querySelectorAll('.button.operator');
     let cancelBtn = document.querySelector('.button.cancel');
     let deleteBtn = document.querySelector('.button.delete');
+    let equalBtn = document.querySelector('.button.equal');
 
     initVariables();
     updateDisplay();
@@ -166,6 +184,7 @@ function init(){
     numberBtn.forEach(itm=> {itm.addEventListener('click',numberBtnCallback)});
     cancelBtn.addEventListener('click',cancelBtnCallback);
     deleteBtn.addEventListener('click',deleteBtnCallback);
+    equalBtn.addEventListener('click',equalBtnCallback);
 }
 
 
