@@ -23,7 +23,7 @@ function percent(x1,x2){
 function operate(operation,x1,x2){
     let result;
 
-    if (x1=="" || x2=="" || operation=="")
+    if (x1=="" || x2=="" || operation=="" || x1==signMinusSymbol || x2==signMinusSymbol)
         return "";
 
     x1=Number(x1);
@@ -64,14 +64,15 @@ function operate(operation,x1,x2){
 // Note: display_txt is not really used in this implementation...could be used to show the single operations over time
 
 function clipStringNumber(str){
-    let str_out;
     if (str.length>0){
+        if (str[0]==signMinusSymbol && str.length==1){
+            return str;
+        }
         if (str.slice(-1)==decimalPoint){
             // Fix the punctuation representation
             return limitDecimals(Number(str.slice(0,-1)))+decimalPoint;
-        }
-        else{
-            return limitDecimals(Number(str));
+        } else {
+            return limitDecimals(Number(str));  
         }
     } else
         return str;
@@ -88,7 +89,7 @@ function updateDisplay(){
     digitsDisplay.textContent = `${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`;
 
     let partial_result = limitDecimals(operate(operator[0],x1[0],x2[0]));
-    resultsDisplay.textContent = partial_result.length>0?`(= ${partial_result})`:'';
+    resultsDisplay.textContent = partial_result.length>0?`(= ${partial_result})${digitStatus}`:digitStatus;
 }
 
 function updateDisplayWithResults(){
@@ -112,14 +113,36 @@ function fixDecimalPoint(str,char){
     return char;
 }
 
+let signMinusSymbol = '-'
+function fixSign(str){
+    if (str.length==0){
+        str = signMinusSymbol;
+    } else if (str[0]==signMinusSymbol) {
+        str = str.slice(1);
+    } else {
+        str = signMinusSymbol+str;
+    }
+    return str;
+}
+
 function numberBtnCallback(e){     
     let btn = e.target;
     let char = btn.textContent;
 
     console.log("Click on "+char+"!");
 
-    if (char=='±'){
-
+    if (char==signSymbol){
+        if(digitStatus==0){
+            x1[0] = fixSign(x1[0]);
+        } else if (digitStatus%2==1){
+            // Start adding digits to x2
+            digitStatus++;
+            x2[0] = fixSign(x2[0]);;
+        } else {
+            // Add digits to x2
+            x2[0] = fixSign(x2[0]);;
+        }
+        display_txt += char;
     } else if (char==decimalPoint){
         if(digitStatus==0){
             // Add . to x1
@@ -243,8 +266,8 @@ function init(){
 
     let decimalPointBtn = document.querySelector('.button.decimalPoint');
     decimalPoint = decimalPointBtn.textContent;
-    let signBtn = document.querySelector('.button.sign');
-    signPoint = signPointBtn.textContent;
+    let signSymbolBtn = document.querySelector('.button.signSymbol');
+    signSymbol = signSymbolBtn.textContent;
     let addOperatorBtn = document.querySelector('.button.addOperator');
     addOperator = addOperatorBtn.textContent;
     let subtractOperatorBtn = document.querySelector('.button.subtractOperator');
@@ -272,6 +295,6 @@ let x1,x2,operation,digitStatus;
 let display_txt;
 let digitsDisplay = document.querySelector('.display .digits');
 let resultsDisplay = document.querySelector('.display .results');
-let decimalPoint,sign,addOperator,subtractOperator,multiplyOperator,divideOperator,percentOperator;
+let decimalPoint,signSymbol,addOperator,subtractOperator,multiplyOperator,divideOperator,percentOperator;
 
 init();
