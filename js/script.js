@@ -16,6 +16,10 @@ function divide(x1,x2){
     return x1/x2;
 }
 
+function percent(x1,x2){
+    return x1/100*x2;
+}
+
 function operate(operation,x1,x2){
     let result;
 
@@ -39,7 +43,10 @@ function operate(operation,x1,x2){
             break;        
         case '/':
             result = divide(x1,x2);
-            break;        
+            break;    
+        case '%':
+            result = percent(x1,x2);
+            break; 
         default:
             console.log('Invalid operation!');
     }
