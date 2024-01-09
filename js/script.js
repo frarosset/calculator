@@ -191,7 +191,7 @@ function operatorBtnCallback(e){
     console.log("Click on "+btn.textContent+"!");
 
     if(digitStatus==0){
-        if (x1[0].length==0)
+        if (x1[0].length==0 || (x1[0].length==1 && x1[0]==signMinusSymbol))
             return;
         // Select operator for the first time
         digitStatus = 1;
@@ -264,6 +264,68 @@ function equalBtnCallback(e){
     updateDisplayWithResults();
 }
 
+/* Capture keyboard press*/
+function keyDownCallback(e){
+    let key = e.key;
+    let buttonClass;
+
+    switch(key){
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            buttonClass = '.num'+key;
+            break;
+        case '+':
+            buttonClass = '.addOperator';
+            break;
+        case '-':
+            buttonClass = '.subtractOperator';
+            break;
+        case '*':
+        case '×':
+        case '⋅':
+            buttonClass = '.multiplyOperator';
+            break;
+        case '/':
+        case '÷':
+            buttonClass = '.divideOperator';
+            break;
+        case '%':
+            buttonClass = '.percentOperator';
+            break;
+        case '.':
+        case ',':
+            buttonClass = '.decimalPoint';
+            break;
+        case 'Enter':
+        case '=':
+            buttonClass = '.equal';
+            break;
+        case 'Backspace':
+            buttonClass = '.delete';
+            break;
+        case 'Delete':
+            buttonClass = '.cancel';
+            break;
+        case 's':
+        case 'S':
+        case '_':
+            buttonClass = '.signSymbol';
+            break;
+        default:
+            return;
+    }
+    document.querySelector(buttonClass).click(); 
+}
+
+
 
 function init(){
     let numberBtn = document.querySelectorAll('.button.number');
@@ -295,6 +357,8 @@ function init(){
     cancelBtn.addEventListener('click',cancelBtnCallback);
     deleteBtn.addEventListener('click',deleteBtnCallback);
     equalBtn.addEventListener('click',equalBtnCallback);
+
+    window.addEventListener('keydown', keyDownCallback);
 }
 
 
