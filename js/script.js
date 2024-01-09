@@ -68,6 +68,9 @@ function clipStringNumber(str){
         if (str[0]==signMinusSymbol && str.length==1){
             return str;
         }
+        if (str==signMinusSymbol+'0'+decimalPoint){
+            return str;
+        }
         if (str.slice(-1)==decimalPoint){
             // Fix the punctuation representation
             return limitDecimals(Number(str.slice(0,-1)))+decimalPoint;
@@ -109,13 +112,15 @@ function updateDisplayWithResults(){
 function fixDecimalPoint(str,char){
     if (str.length==0){
         char = '0' + char;
+    } else if (str.length==1 && str[0]==signMinusSymbol) {
+        char = '0' + char;
     } else if (str.includes(char)) {
         char = '';
     }
     return char;
 }
 
-let signMinusSymbol = '-'
+let signMinusSymbol = '-';
 function fixSign(str){
     if (str.length==0){
         str = signMinusSymbol;
@@ -186,6 +191,8 @@ function operatorBtnCallback(e){
     console.log("Click on "+btn.textContent+"!");
 
     if(digitStatus==0){
+        if (x1[0].length==0)
+            return;
         // Select operator for the first time
         digitStatus = 1;
         operator[0] = btn.textContent;
