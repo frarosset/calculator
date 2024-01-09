@@ -156,6 +156,7 @@ main{
    background-color: var(--col-buttons);
    line-height: 1.3em;
    font-size: var(--btn-fontsize);
+   user-select: none;
 }
 
 /* Display */
@@ -189,36 +190,68 @@ main{
 
 /* Animations on hover/active */
 
-.calculator .button:hover{
-    color: var(--text-color-hightlight);
+@media (pointer: fine) { /*mouse*/
+  .calculator .button:hover{
+      color: var(--text-color-hightlight);
+  }
+
+  .calculator .button.number:hover{
+      background-color: var(--col-number-highlight);
+  }
+
+  .calculator .button.operator:hover{
+      background-color: var(--col-operator-highlight);
+  }
+
+  .calculator .button.equal:hover{
+      background-color: var(--col-equal-highlight);
+  }
+
+  .calculator .button.delete:hover,
+  .calculator .button.cancel:hover{
+      background-color: var(--col-del-highlight);
+  }
+
+  .calculator .button:hover{
+      transition: all var(--time-transition-hover) ease-in-out;
+      transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+      -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+  }
+
+  .calculator .button:active {
+      transform: translate(0px, 0px);
+      -webkit-transform: translate(0px, 0px);
+  }
 }
 
-.calculator .button.number:hover{
-    background-color: var(--col-number-highlight);
-}
+@media (pointer: coarse) { /*finger on a touchscreen*/
+  .calculator .button:active{
+      color: var(--text-color-hightlight);
+  }
 
-.calculator .button.operator:hover{
-    background-color: var(--col-operator-highlight);
-}
+  .calculator .button.number:active{
+      background-color: var(--col-number-highlight);
+  }
 
-.calculator .button.equal:hover{
-    background-color: var(--col-equal-highlight);
-}
+  .calculator .button.operator:active{
+      background-color: var(--col-operator-highlight);
+  }
 
-.calculator .button.delete:hover,
-.calculator .button.cancel:hover{
-    background-color: var(--col-del-highlight);
-}
+  .calculator .button.equal:active{
+      background-color: var(--col-equal-highlight);
+  }
 
-.calculator .button:hover{
-    transition: all var(--time-transition-hover) ease-in-out;
-    transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
-    -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
-}
+  .calculator .button.delete:active,
+  .calculator .button.cancel:active{
+      background-color: var(--col-del-highlight);
+  }
 
-.calculator .button:active {
-    transform: translate(0px, 0px);
-    -webkit-transform: translate(0px, 0px);
+  .calculator .button:active{
+      transition: all var(--time-transition-hover) ease-in-out;
+      transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+      -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+  }
+
 }
 
 /* Shadows */
