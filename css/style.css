@@ -41,6 +41,11 @@
 
   /* Maximum column width */
   --col-width: 400px;
+
+  /* Animations on hover */
+  --offset-translate-hover: -3px;
+  --scale-translate-hover: 1.05;
+  --time-transition-hover: .2s;
 }
 
 
@@ -202,8 +207,29 @@ footer {
     font-weight: 400;
     line-height: 1.2;
     padding: var(--ftr-padding);
-  }
-  
-  footer i {
+}
+
+footer i {
     font-size: 1.3em;
-  }
+}
+
+
+/* Shadows */
+/* .calculator,
+.display,
+.calculator .button{
+    box-shadow: 0px 1px 0px 0px;
+} */
+
+/* Animations */
+.calculator .button:hover{
+    transition: all var(--time-transition-hover) ease-in-out;
+    transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+    -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+}
+
+.calculator .button:active {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+    box-shadow: 0px 1px 0px 0px;
+}
