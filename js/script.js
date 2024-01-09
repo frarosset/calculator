@@ -29,8 +29,6 @@ function operate(operation,x1,x2){
     x1=Number(x1);
     x2=Number(x2);
 
-    console.log(x1)
-    console.log(x2)
     switch(operation){
         case '+':
             result = add(x1,x2);
@@ -66,7 +64,6 @@ function operate(operation,x1,x2){
 // Note: display_txt is not really used in this implementation...could be used to show the single operations over time
 
 function clipStringNumber(str){
-    console.log(str)
     if (str.length>0){
         return limitDecimals(Number(str));
     } else
@@ -88,8 +85,16 @@ function updateDisplay(){
 }
 
 function updateDisplayWithResults(){
-    digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
-    resultsDisplay.textContent = limitDecimals(operate(operator[0],x1[0],x2[0]));
+    let result = limitDecimals(operate(operator[0],x1[0],x2[0]));
+    console.log(result)
+
+    if (result.length>0){
+        digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
+        resultsDisplay.textContent = result.length>0?`${result}`:'';
+    } else {
+        digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`:'';
+        resultsDisplay.textContent = '';
+    }
 }
 
 function numberBtnCallback(e){     
