@@ -18,8 +18,10 @@
   --col-equal-highlight: #c6d161;
 
   /* Font sizes */                               
-  --btn-fontsize: 28px;
+  --btn-fontsize: 24px;
   --txt-fontsize: 22px;
+  --digits-fontsize: 36px;
+  --results-fontsize: 28px;
 
   /* Font family */
   --main-font: 'Patrick Hand SC', sans-serif;
@@ -28,16 +30,19 @@
   --main-padding: 10px;
   --ftr-gap:  20px;
 
+  /* Display */
+  --display-padding: 5px 10px;
+  --display-gap: 3px;
+
   /*Calculator*/
   --calculator-padding: 25px;
-  --calculator-gap: 15px;
-  --btns-padding: 20px;
+  --calculator-gap: 20px;
+  --radius: 10px;
+  --btns-padding: 0px;
   --btns-gap: 10px;
 
   /*Buttons*/
   --btn-padding: 20px;
-  --btn-border: 2px;
-  --btn-height: 100px;
 
   /* Maximum column width */
   --col-width: 400px;
@@ -120,22 +125,16 @@ main{
 }
 
 
-
 .calculator{
     gap: var(--calculator-gap);
     padding: var(--calculator-padding);
     background-color: var(--col-calculator);
-    border-radius: 10px;
+    border-radius: var(--radius);
 }
 
 .calculator .buttons{
     gap: var(--btns-gap);
     padding: var(--btns-padding);
-
-}
-
-.calculator .button:hover{
-    color: var(--text-color-hightlight);
 }
 
 
@@ -150,9 +149,15 @@ main{
 
 .calculator .button{
    flex: 1;
-   border-radius: 50%;
-   padding: 10px 0;
+   border-radius: var(--radius);
+   padding: var(--btn-padding);
    background-color: var(--col-buttons);
+   line-height: 1.5em;
+   font-size: var(--btn-fontsize);
+}
+
+.calculator .button:hover{
+    color: var(--text-color-hightlight);
 }
 
 .calculator .button.number:hover{
@@ -173,24 +178,29 @@ main{
 }
 
 .calculator .display{
+    display: flex;
+    flex-direction: column;
     background-color: var(--col-display);
-    border-radius: 10px;
+    border-radius: var(--radius);
+    padding: var(--display-padding);
+    gap: var(--display-gap);
  }
 
  .calculator .display .results, .calculator .display .digits{
     line-height: 1.1em;
-    height: 1.2em;
+    height: 1.1em;
     text-align: right;
-    overflow-x: hidden; /* Hide horizontal scrollbar */
-    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow: hidden;
  }
 
  .calculator .display .digits{
+    font-size: var(--digits-fontsize);
     color: var(--text-color-result);
+    font-weight: 500;
  }
 
  .calculator .display .results{
-
+    font-size: var(--results-fontsize);
  }
 
 /* || Footer */
@@ -214,13 +224,6 @@ footer i {
 }
 
 
-/* Shadows */
-/* .calculator,
-.display,
-.calculator .button{
-    box-shadow: 0px 1px 0px 0px;
-} */
-
 /* Animations */
 .calculator .button:hover{
     transition: all var(--time-transition-hover) ease-in-out;
@@ -231,5 +234,4 @@ footer i {
 .calculator .button:active {
     transform: translate(0px, 0px);
     -webkit-transform: translate(0px, 0px);
-    box-shadow: 0px 1px 0px 0px;
 }
