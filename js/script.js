@@ -1,3 +1,5 @@
+let decimalPoint = '.';
+
 
 /* Calculator operations */
 function add(x1,x2){
@@ -64,8 +66,15 @@ function operate(operation,x1,x2){
 // Note: display_txt is not really used in this implementation...could be used to show the single operations over time
 
 function clipStringNumber(str){
+    let str_out;
     if (str.length>0){
-        return limitDecimals(Number(str));
+        if (str.slice(-1)==decimalPoint){
+            // Fix the punctuation representation
+            return limitDecimals(Number(str.slice(0,-1)))+decimalPoint;
+        }
+        else{
+            return limitDecimals(Number(str));
+        }
     } else
         return str;
 }
@@ -86,7 +95,6 @@ function updateDisplay(){
 
 function updateDisplayWithResults(){
     let result = limitDecimals(operate(operator[0],x1[0],x2[0]));
-    console.log(result)
 
     if (result.length>0){
         digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
@@ -97,24 +105,55 @@ function updateDisplayWithResults(){
     }
 }
 
+function fixDecimalPoint(str,char){
+    if (str.length==0){
+        char = '0' + char;
+    } else if (str.includes(char)) {
+        char = '';
+    }
+    return char;
+}
+
 function numberBtnCallback(e){     
     let btn = e.target;
+    let char = btn.textContent;
 
-    console.log("Click on "+btn.textContent+"!");
+    console.log("Click on "+char+"!");
 
-    if(digitStatus==0){
-        // Add digits to x1
-        x1[0] += btn.textContent;
-    } else if (digitStatus%2==1){
-        // Start adding digits to x2
-        digitStatus++;
-        x2[0] = btn.textContent;
+    if (char=='±'){
+
+    } else if (char==decimalPoint){
+        if(digitStatus==0){
+            // Add . to x1
+            char=fixDecimalPoint(x1[0],char);
+            x1[0] += char;
+        } else if (digitStatus%2==1){
+            // Start adding digits to x2
+            digitStatus++;
+            char=fixDecimalPoint(x2[0],char);
+            x2[0] = char;
+        } else {
+            // Add digits to x2
+            char=fixDecimalPoint(x2[0],char);
+            x2[0] += char;
+        }
+        display_txt += char;
     } else {
-        // Add digits to x2
-        x2[0] += btn.textContent;
+        if(digitStatus==0){
+            // Add digits to x1
+            x1[0] += char;
+        } else if (digitStatus%2==1){
+            // Start adding digits to x2
+            digitStatus++;
+            x2[0] = char;
+        } else {
+            // Add digits to x2
+            x2[0] += char;
+        }
+
+        display_txt += char;
     }
 
-    display_txt += btn.textContent;
     updateDisplay();
 }
 
@@ -203,6 +242,10 @@ function init(){
     let cancelBtn = document.querySelector('.button.cancel');
     let deleteBtn = document.querySelector('.button.delete');
     let equalBtn = document.querySelector('.button.equal');
+
+    let decimalPointBtn = document.querySelector('.button.decimalPoint');
+    decimalPoint = decimalPointBtn.textContent;
+
 
     initVariables();
     updateDisplay();
