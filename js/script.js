@@ -1,5 +1,3 @@
-let decimalPoint = '.';
-
 
 /* Calculator operations */
 function add(x1,x2){
@@ -32,19 +30,19 @@ function operate(operation,x1,x2){
     x2=Number(x2);
 
     switch(operation){
-        case '+':
+        case addOperator:
             result = add(x1,x2);
             break;
-        case '-':
+        case subtractOperator:
             result = subtract(x1,x2);
             break;
-        case '*':
+        case multiplyOperator:
             result = multiply(x1,x2);
             break;        
-        case '/':
+        case divideOperator:
             result = divide(x1,x2);
             break;    
-        case '%':
+        case percentOperator:
             result = percent(x1,x2);
             break; 
         default:
@@ -245,7 +243,18 @@ function init(){
 
     let decimalPointBtn = document.querySelector('.button.decimalPoint');
     decimalPoint = decimalPointBtn.textContent;
-
+    let signBtn = document.querySelector('.button.sign');
+    signPoint = signPointBtn.textContent;
+    let addOperatorBtn = document.querySelector('.button.addOperator');
+    addOperator = addOperatorBtn.textContent;
+    let subtractOperatorBtn = document.querySelector('.button.subtractOperator');
+    subtractOperator = subtractOperatorBtn.textContent;
+    let multiplyOperatorBtn = document.querySelector('.button.multiplyOperator');
+    multiplyOperator = multiplyOperatorBtn.textContent;
+    let divideOperatorBtn = document.querySelector('.button.divideOperator');
+    divideOperator = divideOperatorBtn.textContent;
+    let percentOperatorBtn = document.querySelector('.button.percentOperator');
+    percentOperator = percentOperatorBtn.textContent;
 
     initVariables();
     updateDisplay();
@@ -263,5 +272,6 @@ let x1,x2,operation,digitStatus;
 let display_txt;
 let digitsDisplay = document.querySelector('.display .digits');
 let resultsDisplay = document.querySelector('.display .results');
+let decimalPoint,sign,addOperator,subtractOperator,multiplyOperator,divideOperator,percentOperator;
 
 init();
