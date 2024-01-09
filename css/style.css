@@ -5,6 +5,7 @@
   --purewhite: #ffffff;
 
   --col-calculator: #393939;
+  --col-button-shadow: #292929;
   --col-display: #646464;
   --col-buttons: #8e8e8e;
 
@@ -18,7 +19,7 @@
   --col-equal-highlight: #c6d161;
 
   /* Font sizes */                               
-  --btn-fontsize: 24px;
+  --btn-fontsize: 26px;
   --txt-fontsize: 22px;
   --digits-fontsize: 36px;
   --results-fontsize: 28px;
@@ -132,6 +133,7 @@ main{
     border-radius: var(--radius);
 }
 
+/* Buttons */
 .calculator .buttons{
     gap: var(--btns-gap);
     padding: var(--btns-padding);
@@ -152,30 +154,11 @@ main{
    border-radius: var(--radius);
    padding: var(--btn-padding);
    background-color: var(--col-buttons);
-   line-height: 1.5em;
+   line-height: 1.3em;
    font-size: var(--btn-fontsize);
 }
 
-.calculator .button:hover{
-    color: var(--text-color-hightlight);
-}
-
-.calculator .button.number:hover{
-    background-color: var(--col-number-highlight);
-}
-
-.calculator .button.operator:hover{
-    background-color: var(--col-operator-highlight);
-}
-
-.calculator .button.equal:hover{
-    background-color: var(--col-equal-highlight);
-}
-
-.calculator .button.delete:hover,
-.calculator .button.cancel:hover{
-    background-color: var(--col-del-highlight);
-}
+/* Display */
 
 .calculator .display{
     display: flex;
@@ -203,6 +186,56 @@ main{
     font-size: var(--results-fontsize);
  }
 
+
+/* Animations on hover/active */
+
+.calculator .button:hover{
+    color: var(--text-color-hightlight);
+}
+
+.calculator .button.number:hover{
+    background-color: var(--col-number-highlight);
+}
+
+.calculator .button.operator:hover{
+    background-color: var(--col-operator-highlight);
+}
+
+.calculator .button.equal:hover{
+    background-color: var(--col-equal-highlight);
+}
+
+.calculator .button.delete:hover,
+.calculator .button.cancel:hover{
+    background-color: var(--col-del-highlight);
+}
+
+.calculator .button:hover{
+    transition: all var(--time-transition-hover) ease-in-out;
+    transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+    -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
+}
+
+.calculator .button:active {
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+}
+
+/* Shadows */
+.calculator{
+    box-shadow: 3px 3px 5px var(--col-calculator);
+}
+
+.calculator .button{
+    box-shadow: 3px 3px 5px var(--col-button-shadow);
+}
+
+.display{
+    box-shadow: 3px 3px 10px var(--col-calculator) inset;
+}
+
+
+
 /* || Footer */
 footer {
     --light-grey: rgb(210, 210, 210);
@@ -221,17 +254,4 @@ footer {
 
 footer i {
     font-size: 1.3em;
-}
-
-
-/* Animations */
-.calculator .button:hover{
-    transition: all var(--time-transition-hover) ease-in-out;
-    transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
-    -webkit-transform: translate(0px, var(--offset-translate-hover)) scale(var(--scale-translate-hover));
-}
-
-.calculator .button:active {
-    transform: translate(0px, 0px);
-    -webkit-transform: translate(0px, 0px);
 }
