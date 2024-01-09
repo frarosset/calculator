@@ -2,27 +2,30 @@
 
 :root {
   /* Colors */
-  --black: rgb(0, 0, 0);
-  --white: #f1f1f1;
   --purewhite: #ffffff;
-  --grey: rgb(171, 171, 171);
-  --col10: #F55555;
-  --col70: #6A6FFD;
-  --col30 :#40B1F8;
-  --light-grey: rgb(210, 210, 210);
+
+  --col-calculator: #393939;
+  --col-display: #646464;
+  --col-buttons: #8e8e8e;
+
+  --text-color: #e3e3e3;
+  --text-color-hightlight: var(--col-calculator);
+  --text-color-result: #c6d161;
+
+  --col-number-highlight: #b9b9b9;
+  --col-del-highlight: #fe6847;
+  --col-operator-highlight: #9999dd;
+  --col-equal-highlight: #c6d161;
 
   /* Font sizes */                               
   --btn-fontsize: 28px;
   --txt-fontsize: 22px;
-  --ftr-fontsize: 12px;
 
   /* Font family */
   --main-font: 'Patrick Hand SC', sans-serif;
-  --ftr-font: 'Montserrat';
 
   /*Margins and paddings*/
   --main-padding: 10px;
-  --ftr-padding: 5px;
   --ftr-gap:  20px;
 
   /*Calculator*/
@@ -43,7 +46,7 @@
 
 html {
   background-color: var(--purewhite);
-  color:  var(--black);
+  color:  var(--text-color);
   font-family: var(--main-font), monospace;
   font-weight: 400;
   line-height: 1em;
@@ -111,10 +114,12 @@ main{
     text-align: center;
 }
 
+
+
 .calculator{
     gap: var(--calculator-gap);
     padding: var(--calculator-padding);
-    background-color: var(--col10);
+    background-color: var(--col-calculator);
     border-radius: 10px;
 }
 
@@ -122,6 +127,10 @@ main{
     gap: var(--btns-gap);
     padding: var(--btns-padding);
 
+}
+
+.calculator .button:hover{
+    color: var(--text-color-hightlight);
 }
 
 
@@ -138,11 +147,28 @@ main{
    flex: 1;
    border-radius: 50%;
    padding: 10px 0;
-   background-color: var(--col70);
+   background-color: var(--col-buttons);
+}
+
+.calculator .button.number:hover{
+    background-color: var(--col-number-highlight);
+}
+
+.calculator .button.operator:hover{
+    background-color: var(--col-operator-highlight);
+}
+
+.calculator .button.equal:hover{
+    background-color: var(--col-equal-highlight);
+}
+
+.calculator .button.delete:hover,
+.calculator .button.cancel:hover{
+    background-color: var(--col-del-highlight);
 }
 
 .calculator .display{
-    background-color: var(--col30);
+    background-color: var(--col-display);
     border-radius: 10px;
  }
 
@@ -155,13 +181,20 @@ main{
  }
 
  .calculator .display .digits{
+    color: var(--text-color-result);
  }
 
  .calculator .display .results{
+
  }
 
 /* || Footer */
 footer {
+    --light-grey: rgb(210, 210, 210);
+    --black: rgb(0, 0, 0);
+    --ftr-fontsize: 12px;
+    --ftr-font: 'Montserrat';
+    --ftr-padding: 5px;
     background-color: var(--light-grey);
     color: var(--black);
     font-family: var(--ftr-font), sans-serif;

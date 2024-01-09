@@ -89,15 +89,17 @@ function updateDisplay(){
     digitsDisplay.textContent = `${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`;
 
     let partial_result = limitDecimals(operate(operator[0],x1[0],x2[0]));
-    resultsDisplay.textContent = partial_result.length>0?`(= ${partial_result})${digitStatus}`:digitStatus;
+    resultsDisplay.textContent = partial_result.length>0?`${partial_result}`:'';
 }
 
 function updateDisplayWithResults(){
     let result = limitDecimals(operate(operator[0],x1[0],x2[0]));
 
     if (result.length>0){
-        digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
-        resultsDisplay.textContent = result.length>0?`${result}`:'';
+        //digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
+        //resultsDisplay.textContent = result.length>0?`${result}`:'';
+        resultsDisplay.textContent = '';
+        digitsDisplay.textContent = `${result}`;
     } else {
         digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`:'';
         resultsDisplay.textContent = '';
@@ -254,7 +256,6 @@ function equalBtnCallback(e){
     console.log("Click on =!");
     updateDisplayWithResults();
 }
-
 
 
 function init(){
