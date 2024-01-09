@@ -146,16 +146,18 @@ main{
     border-radius: 10px;
  }
 
- .calculator .display .digits{
+ .calculator .display .results, .calculator .display .digits{
     line-height: 1.1em;
     height: 1.2em;
     text-align: right;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+ }
+
+ .calculator .display .digits{
  }
 
  .calculator .display .results{
-    line-height: 1.1em;
-    height: 1.2em;
-    text-align: right;
  }
 
 /* || Footer */

@@ -58,16 +58,31 @@ function operate(operation,x1,x2){
 
 // Note: display_txt is not really used in this implementation...could be used to show the single operations over time
 
-function updateDisplay(){
-    digitsDisplay.textContent = `${x1[0]} ${operator[0]} ${x2[0]}`;
+function clipStringNumber(str){
+    console.log(str)
+    if (str.length>0){
+        return limitDecimals(Number(str));
+    } else
+        return str;
+}
 
-    let partial_result = String(operate(operator[0],x1[0],x2[0]));
+function limitDecimals(num,precision = 5){
+    if (String(num).includes('e'))
+        return num.toExponential(precision);
+    else
+        return String(num);
+}
+
+function updateDisplay(){
+    digitsDisplay.textContent = `${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`;
+
+    let partial_result = limitDecimals(operate(operator[0],x1[0],x2[0]));
     resultsDisplay.textContent = partial_result.length>0?`(= ${partial_result})`:'';
 }
 
 function updateDisplayWithResults(){
-    digitsDisplay.textContent = `${x1[0]} ${operator[0]} ${x2[0]} =`;
-    resultsDisplay.textContent = String(operate(operator[0],x1[0],x2[0]));
+    digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
+    resultsDisplay.textContent = limitDecimals(operate(operator[0],x1[0],x2[0]));
 }
 
 function numberBtnCallback(e){     
@@ -186,7 +201,6 @@ function init(){
     deleteBtn.addEventListener('click',deleteBtnCallback);
     equalBtn.addEventListener('click',equalBtnCallback);
 }
-
 
 
 
