@@ -20,7 +20,7 @@
 
   /* Font sizes */  
   --txt-fontsize: 22px;              
-  --btn-fontsize: 1.2rem;
+  --btn-fontsize: min(1.2rem,15vw);
   --digits-fontsize: 1.6rem;
   --results-fontsize: 1.3rem;
 
@@ -36,14 +36,14 @@
   --display-gap: 3px;
 
   /*Calculator*/
-  --calculator-padding: 25px;
+  --calculator-padding: min(25px,5vw);
   --calculator-gap: 20px;
   --radius: 10px;
   --btns-padding: 0px;
-  --btns-gap: 10px;
+  --btns-gap: min(10px,2vw);
 
   /*Buttons*/
-  --btn-padding: 20px;
+  --btn-padding: 20px min(20px,2vw);
 
   /* Maximum column width */
   --col-width: 400px;
