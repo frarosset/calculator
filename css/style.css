@@ -18,11 +18,11 @@
   --col-operator-highlight: #9999dd;
   --col-equal-highlight: #c6d161;
 
-  /* Font sizes */                               
-  --btn-fontsize: 26px;
-  --txt-fontsize: 22px;
-  --digits-fontsize: 36px;
-  --results-fontsize: 28px;
+  /* Font sizes */  
+  --txt-fontsize: 22px;              
+  --btn-fontsize: 1.2rem;
+  --digits-fontsize: 1.6rem;
+  --results-fontsize: 1.3rem;
 
   /* Font family */
   --main-font: 'Sarabun', sans-serif;
@@ -171,8 +171,8 @@ main{
  }
 
  .calculator .display .results, .calculator .display .digits{
-    line-height: 1.1em;
-    height: 1.1em;
+    line-height: 1.4rem;
+    height: 1.4rem;
     text-align: right;
     overflow: hidden;
  }
@@ -181,6 +181,8 @@ main{
     font-size: var(--digits-fontsize);
     color: var(--text-color-result);
     font-weight: 500;
+    overflow: visible;
+    white-space: nowrap;
  }
 
  .calculator .display .results{

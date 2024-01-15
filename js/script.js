@@ -63,50 +63,168 @@ function operate(operation,x1,x2){
 
 // Note: display_txt is not really used in this implementation...could be used to show the single operations over time
 
-function clipStringNumber(str){
+function clipStringNumber(str, precision=5){
     if (str.length>0){
-        if (str[0]==signMinusSymbol && str.length==1){
-            return str;
-        }
-        if (str==signMinusSymbol+'0'+decimalPoint){
+        if (   str == signMinusSymbol 
+            || str == signMinusSymbol+'0'
+            || str == signMinusSymbol+'0'+decimalPoint
+            || str == '0'+decimalPoint){
             return str;
         }
         if (str.slice(-1)==decimalPoint){
             // Fix the punctuation representation
-            return limitDecimals(Number(str.slice(0,-1)))+decimalPoint;
+            str = limitDecimals(str.slice(0,-1),precision);
+            if (!str.includes('e'))
+                str += decimalPoint;
+            return str;
         } else {
-            return limitDecimals(Number(str));  
+            return limitDecimals(str,precision,false);  
         }
     } else
         return str;
 }
 
-function limitDecimals(num,precision = 5){
-    if (String(num).includes('e'))
-        return num.toExponential(precision);
-    else
-        return String(num);
+let precisionDigits = 10;
+let precisionResult = 10;
+let truncateSymbol = '…';
+
+function getPrecision(strNum){
+    let numArr = strNum.split('e');
+    // numArr[0] is the the non-exponent portion of strNum
+
+    return numArr[0].replace(/^[+\-]/,'')  // remove sign
+                    .replace(/\./,'')      // remove decimal point (e.g., 001000->001000, 0.012->0012, 01.0-> 010, 12->12)
+                    .replace(/^0+/,'')     // remove heading 0     (e.g., 001000->  1000,  0012->  12,  010->  10, 12->12)
+                    .length;
+}
+
+function getDigits(strNum){
+    let numArr = strNum.split('e');
+    // numArr[0] is the the non-exponent portion of strNum
+
+    return numArr[0].replace(/[+\-\.]/g,'').length;
+}
+
+function getTrailingZeros(strNum){
+    return strNum.length - removeTrailingZeros(strNum).length;
+}
+
+function removeTrailingZeros(strNum){
+    let numArr = strNum.split('e');
+    // numArr[0] is the the non-exponent portion of strNum
+
+    if (numArr[0].includes('.'))
+        numArr[0] = numArr[0].replace(/0+$/,'')  // trailing zeros
+
+    return numArr.join('e'); 
+}
+
+function toPrecisionTruncate(num,precision){
+    let precStrNum = num.toPrecision(precision+1);
+    precStrNum = precStrNum.split('e');
+    precStrNum[0] = precStrNum[0].slice(0,-1);
+
+    //console.log(num.toPrecision(precision),precStrNum.join('e'),getDigits(num.toPrecision(precision)),getDigits(precStrNum.join('e')))
+    return precStrNum.join('e'); 
+}
+
+function limitDecimals(strNum,precision = 5,removeTrailingDecimalZeros=true){
+    if (strNum.length==0)
+        return '';
+
+    let num = Number(strNum);
+    let numOfDigits  = getDigits(strNum);
+    let numPrecision = getPrecision(strNum);
+    let trailingZeros = getTrailingZeros(strNum);
+
+    //console.log('STR:'+strNum + ' ND:' + numOfDigits + ' TZ:'+ trailingZeros + ' SD:'+numPrecision)
+
+    if (numOfDigits<=precision){
+        return strNum;
+    } else if (!removeTrailingDecimalZeros && trailingZeros>0 && num==0){
+        return num.toPrecision(precision).concat(truncateSymbol); 
+        //return '0.0<sub>x' + trailingZeros + '</sub>'; // Use inner html;
+    } 
+
+    // Truncate number (note: not round)
+    //let precStrNum = num.toPrecision(precision+1);
+    let precStrNum = toPrecisionTruncate(num,precision);
+    let precNum = Number(precStrNum);
+
+    if (precNum!=num){ // truncated
+        precStrNum = precStrNum.split('e');
+        precStrNum[0] = precStrNum[0].concat(truncateSymbol);
+        precStrNum = precStrNum.join('e');
+    } else if (precStrNum.includes('.')){
+        precStrNum = precStrNum.split('e');
+
+        if (removeTrailingDecimalZeros){
+            precStrNum[0] = removeTrailingZeros(precStrNum[0]);
+        } else {
+            let precNumPrecision = getPrecision(precStrNum[0]);
+            let zerosToRemove = precNumPrecision-numPrecision;
+
+            //console.log(`(${strNum})SD: ${numPrecision} (${precStrNum[0]})rd: ${precNumPrecision} --> (${zerosToRemove>0?precStrNum[0].slice(0,-zerosToRemove):precStrNum[0]})${zerosToRemove}`)
+            if (zerosToRemove>0)
+                precStrNum[0] = precStrNum[0].slice(0,-zerosToRemove);
+            //else if (zerosToRemove<0){
+                //precStrNum[0] += '<sub>x' + (-zerosToRemove+1) + '</sub>'; // Use inner html;
+            //}
+        }
+        precStrNum = precStrNum.join('e');        
+    }
+
+    precStrNum=precStrNum.replace('+','');
+
+    return precStrNum;
+}
+
+// https://stackoverflow.com/questions/9333379/check-if-an-elements-content-is-overflowing
+function isOverflownWidth(element) {
+    return element.scrollWidth > element.clientWidth;
+}
+
+function fixOverflow(element,defaultFontSize){
+    element.style.fontSize = defaultFontSize;
+    let newFontSize = defaultFontSize.slice(0,-3);
+    while (isOverflownWidth(element)){
+        newFontSize = newFontSize*0.95;
+        element.style.fontSize = newFontSize+'px';
+    }
+}
+
+function getDigitsString(){
+    let str = `${clipStringNumber(x1[0],precisionDigits)} ${operator[0]} ${clipStringNumber(x2[0],precisionDigits)}`
+    
+    return x1[0].length>0?str:'';
+}
+
+
+function getResultString(){
+    return limitDecimals(operate(operator[0],x1[0],x2[0]).toString(),precisionResult);
 }
 
 function updateDisplay(){
-    digitsDisplay.textContent = `${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`;
+    digitsDisplay.innerHTML = getDigitsString();
+    fixOverflow(digitsDisplay,displayFontSize);
 
-    let partial_result = limitDecimals(operate(operator[0],x1[0],x2[0]));
-    resultsDisplay.textContent = partial_result.length>0?`${partial_result}`:'';
+    let partial_result = getResultString();
+    resultsDisplay.innerHTML = partial_result.length>0?partial_result:'';
+    fixOverflow(resultsDisplay,resultsFontSize);
 }
 
 function updateDisplayWithResults(){
-    let result = limitDecimals(operate(operator[0],x1[0],x2[0]));
+    let result = getResultString();
 
     if (result.length>0){
-        //digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])} =`:'';
-        //resultsDisplay.textContent = result.length>0?`${result}`:'';
-        resultsDisplay.textContent = '';
-        digitsDisplay.textContent = `${result}`;
+        resultsDisplay.innerHTML = '';
+        digitsDisplay.innerHTML = result;
     } else {
-        digitsDisplay.textContent = x1[0].length>0?`${clipStringNumber(x1[0])} ${operator[0]} ${clipStringNumber(x2[0])}`:'';
-        resultsDisplay.textContent = '';
+        digitsDisplay.innerHTML = getDigitsString();
+        resultsDisplay.innerHTML = '';
     }
+    fixOverflow(digitsDisplay,displayFontSize);
+    fixOverflow(resultsDisplay,resultsFontSize);
 }
 
 function fixDecimalPoint(str,char){
@@ -132,11 +250,20 @@ function fixSign(str){
     return str;
 }
 
+function fixHeadingZeros(str){
+    if (str=='0')
+        return '';
+    else if (str== signMinusSymbol+'0')
+        return signMinusSymbol;
+    else
+        return str;
+}
+
 function numberBtnCallback(e){     
     let btn = e.target;
     let char = btn.textContent;
 
-    console.log("Click on "+char+"!");
+    //console.log("Click on "+char+"!");
 
     if (char==signSymbol){
         if(digitStatus==0){
@@ -166,9 +293,10 @@ function numberBtnCallback(e){
             x2[0] += char;
         }
         display_txt += char;
-    } else {
+    } else { // Number
         if(digitStatus==0){
             // Add digits to x1
+            x1[0] = fixHeadingZeros(x1[0]);
             x1[0] += char;
         } else if (digitStatus%2==1){
             // Start adding digits to x2
@@ -176,6 +304,7 @@ function numberBtnCallback(e){
             x2[0] = char;
         } else {
             // Add digits to x2
+            x2[0] = fixHeadingZeros(x2[0]);
             x2[0] += char;
         }
 
@@ -188,7 +317,7 @@ function numberBtnCallback(e){
 function operatorBtnCallback(e){     
     let btn = e.target;
 
-    console.log("Click on "+btn.textContent+"!");
+    //console.log("Click on "+btn.textContent+"!");
 
     if(digitStatus==0){
         if (x1[0].length==0 || (x1[0].length==1 && x1[0]==signMinusSymbol))
@@ -215,7 +344,7 @@ function operatorBtnCallback(e){
 function deleteBtnCallback(e){
     let btn = e.target;
 
-    console.log("Click on delete!");
+    //console.log("Click on delete!");
 
     if(digitStatus==0){
         // Remove one digit from the initial x1
@@ -253,14 +382,14 @@ function initVariables(){
 
 function cancelBtnCallback(e){     
     let btn = e.target;
-    console.log("Click on cancel!");
+    //console.log("Click on cancel!");
     initVariables()
     updateDisplay();
 }
 
 function equalBtnCallback(e){     
     let btn = e.target;
-    console.log("Click on =!");
+    //console.log("Click on =!");
     updateDisplayWithResults();
 }
 
@@ -349,8 +478,10 @@ function init(){
     let percentOperatorBtn = document.querySelector('.button.percentOperator');
     percentOperator = percentOperatorBtn.textContent;
 
+    digitsDisplay = document.querySelector('.display .digits');
+    resultsDisplay = document.querySelector('.display .results');
+
     initVariables();
-    updateDisplay();
 
     operatorBtn.forEach(itm=> {itm.addEventListener('click',operatorBtnCallback)});
     numberBtn.forEach(itm=> {itm.addEventListener('click',numberBtnCallback)});
@@ -359,14 +490,19 @@ function init(){
     equalBtn.addEventListener('click',equalBtnCallback);
 
     window.addEventListener('keydown', keyDownCallback);
-}
 
+    window.addEventListener('load',()=>{
+        displayFontSize = getComputedStyle(digitsDisplay).getPropertyValue('font-size');
+        resultsFontSize = getComputedStyle(resultsDisplay).getPropertyValue('font-size');
+        updateDisplay();
+    });
+}
 
 
 let x1,x2,operation,digitStatus;
 let display_txt;
-let digitsDisplay = document.querySelector('.display .digits');
-let resultsDisplay = document.querySelector('.display .results');
+let digitsDisplay, resultsDisplay;
 let decimalPoint,signSymbol,addOperator,subtractOperator,multiplyOperator,divideOperator,percentOperator;
+let displayFontSize,resultsFontSize;
 
 init();
